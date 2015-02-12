@@ -1,21 +1,14 @@
 # Select-Plugins.ps1
 
-# selectively enable / disable vCheck Plugins
+# selectively enable / disable Plugins
 
 # presents a list of plugins whose names match *.ps1 or *.ps1.disabled
-# 
+#
 # disabled plugins will be renamed as appropriate to <pluginname>.ps1.disabled
 # enabled plugins will be renamed as appropriate to <plugin name>.ps1
 
-# To use, run from the vCheck directory
-#     or, if you wish to be perverse, copy to the plugins directory and rename to 
-#         "ZZ Select Plugins for Next Run.ps1" and run vCheck as normal.
-
+# To use, run from the root directory
 # Great for testing plugins.  When done, untick it...
-
-# If run as a plugin, it will affect the next vCheck run, not the current one,
-#   as vCheck has already collected its list of plugins when it is invoked
-#   so make it the very last plugin executed to avoid counter-intuitive behaviour
 
 # based on code from Select-GraphicalFilteredObject.ps1 in
 #  "Windows Powershell Cookbook" by Lee Holmes.
@@ -24,7 +17,7 @@
 # and used under the 'free use' provisions specified on Preface page xxv
 
 $Title = "Plugin Selection Plugin"
-$Author = "Phil Randal"
+$Author = "JSt"
 $PluginVersion = 2.0
 $Header =  "Plugin Selection"
 $Comments = "Plugin Selection"
@@ -39,7 +32,7 @@ If ($PluginPath -notmatch 'plugins$') {
 }
 $plugins=get-childitem -Path $PluginPath | where {$_.name -match '.*\.ps1(?:\.disabled|)$'} |
    Sort Name |
-   Select Name, 
+   Select Name,
           @{Label="Plugin";expression={$_.Name -replace '(.*)\.ps1(?:\.disabled|)$', '$1'}},
           @{Label="Enabled";expression={$_.Name -notmatch '.*\.disabled$'}}
 
