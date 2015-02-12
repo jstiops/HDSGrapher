@@ -1,0 +1,11 @@
+# Start of Settings
+# End of Settings
+ 
+# Everything in this script will run at the end of vCheck
+
+
+$Title = "Last Plugin"
+$Display = "None"
+$Author = "Jeffrey Strik"
+$PluginVersion = 1.0
+
