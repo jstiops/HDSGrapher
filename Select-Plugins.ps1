@@ -1,4 +1,4 @@
-# Select-Plugins.ps1
+﻿# Select-Plugins.ps1
 
 # selectively enable / disable Plugins
 

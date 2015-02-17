@@ -13,7 +13,7 @@
    http://www.google.com
 
 .INPUTS
-   No inputs required
+   See parameters
 .OUTPUTS
    Graph images
 
@@ -149,11 +149,16 @@ Function Invoke-Settings ($Filename, $GB) {
 #                                Initialization                                #
 ################################################################################
 # Setup all paths required for script to run
+function Get-ScriptDirectory
+{
+    Split-Path $script:MyInvocation.MyCommand.Path
+}
+
 $ScriptPath = (Split-Path ((Get-Variable MyInvocation).Value).MyCommand.Path)
 
-$PluginsFolder = $ScriptPath + "\Plugins\"
+$PluginsFolder = "$(Get-ScriptDirectory)\Plugins\"
 $Plugins = Get-ChildItem -Path $PluginsFolder -filter "*.ps1" | Sort Name
-$GlobalVariables = $ScriptPath + "\GlobalVariables.ps1"
+$GlobalVariables = "$(Get-ScriptDirectory)\GlobalVariables.ps1"
 
 ## Determine if the setup wizard needs to run
 $file = Get-Content $GlobalVariables
@@ -176,8 +181,9 @@ if ($SetupSetting -or $config) {
 	}#>
 }
 
-## Include GlobalVariables and validate settings (at the moment just check they exist)
-. $GlobalVariables
+## Include GlobalVariables and validate settings
+#Write-Host "Including global variables from $GlobalVariables..."
+. "$(Get-ScriptDirectory)\GlobalVariables.ps1"
 
 $testing = Test-Path $GraphOutputPath -pathType container
 if((Test-Path $GraphOutputPath -pathType container) -eq $False ){
@@ -206,27 +212,26 @@ foreach($gvar in $gvars) {
 #                                 Script logic                                 #
 ################################################################################
 # Start generating the report
-$TTRReport = @()
+#$TTRReport = @()
 Write-Host "`nBegin Plugin Processing"
 # Loop over all enabled plugins
 $p = 0
 $Plugins | Foreach {
-  $TableFormat = $null
+  #$TableFormat = $null
   $IDinfo = Get-PluginID $_.Fullname
   $p++
   Write-CustomOut ($IDinfo["Title"], $IDinfo["Version"])
-  $pluginStatus = ($lang.pluginStatus -f $p, $plugins.count, $_.Name)
-  $TTR = [math]::round((Measure-Command {$Details = . $_.FullName}).TotalSeconds, 2)
-  $TTRReport += New-Object PSObject -Property @{"Name"=$_.Name; "TimeToRun"=$TTR}
-  $ver = "{0:N1}" -f $PluginVersion
-  Write-CustomOut ($IDinfo["Title"], $IDinfo["Version"])
+  #$pluginStatus = ($lang.pluginStatus -f $p, $plugins.count, $_.Name)
+  #$TTR = [math]::round((Measure-Command {$Details = . $_.FullName}).TotalSeconds, 2)
+  . $_.FullName
+  #$TTRReport += New-Object PSObject -Property @{"Name"=$_.Name; "TimeToRun"=$TTR}
+  #$ver = "{0:N1}" -f $PluginVersion
+  #Write-CustomOut ($IDinfo["Title"], $IDinfo["Version"])
 }
 
 ################################################################################
 #                                    Output                                    #
 ################################################################################
-
-
 # Run EndScript once everything else is complete
 if (Test-Path ($ScriptPath + "\EndScript.ps1")) {
   . ($ScriptPath + "\EndScript.ps1")
