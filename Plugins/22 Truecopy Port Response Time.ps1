@@ -5,7 +5,7 @@ $PluginVersion = 3.0
 
 # Start of Settings
 # Which ports to graph? Example: All | 0a,0b,1a,1b
-$PortsToGraph ="0c,1c"
+$PortsToGraph ="0d,1d"
 # End of Settings
 
 #settings for plugins
