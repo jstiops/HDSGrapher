@@ -15,7 +15,7 @@ This script framework can creat graphs from .csv files coming from HDS HUS and A
 * AMS2500
 
 These scripts use the PSGraph powershell module. 
-https://github.com/jsttech/PSGraph
+https://github.com/jstiops/PSGraph
 
 ##Instalation
 1. Download the .zip bundle of HDSGrapher from Github
